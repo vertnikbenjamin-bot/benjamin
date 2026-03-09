@@ -35,9 +35,8 @@ export default function ChatBot() {
       }
 
       const ai = new GoogleGenAI({ apiKey });
-      const model = ai.models.getGenerativeModel({ 
-        model: "gemini-2.5-flash-lite-latest",
-        systemInstruction: `You are the AI assistant for Benjamin Vertnik AI Visual Content Production. 
+      
+      const systemInstruction = `You are the AI assistant for Benjamin Vertnik AI Visual Content Production. 
         Your goal is to help potential clients understand the services and book a call.
         
         Key Information:
@@ -50,18 +49,25 @@ export default function ChatBot() {
         If asked about pricing, say that it depends on the project scope and volume, and encourage them to book a discovery call.
         If asked to book a call, direct them to the email form in the footer or suggest they leave their email.
         
-        Keep responses relatively short (under 3 sentences usually).`
-      });
+        Keep responses relatively short (under 3 sentences usually).`;
 
-      const chat = model.startChat({
-        history: messages.map(m => ({
+      const contents = [
+        ...messages.map(m => ({
           role: m.role,
           parts: [{ text: m.text }]
-        }))
+        })),
+        { role: 'user', parts: [{ text: userMessage }] }
+      ];
+
+      const result = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: contents,
+        config: {
+          systemInstruction: systemInstruction
+        }
       });
 
-      const result = await chat.sendMessage(userMessage);
-      const response = result.response.text();
+      const response = result.text;
 
       setMessages(prev => [...prev, { role: 'model', text: response }]);
     } catch (error) {
