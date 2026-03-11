@@ -241,8 +241,7 @@ const translations = {
   }
 };
 
-type Language = 'en' | 'sl';
-const LanguageContext = createContext<{ lang: Language; toggleLang: () => void; t: typeof translations['en'] } | null>(null);
+const LanguageContext = createContext(null);
 
 function useLanguage() {
   const context = useContext(LanguageContext);
@@ -250,7 +249,7 @@ function useLanguage() {
   return context;
 }
 
-function Navbar({ isMenuOpen, toggleMenu }: { isMenuOpen: boolean; toggleMenu: () => void }) {
+function Navbar({ isMenuOpen, toggleMenu }) {
   const { t, lang, toggleLang } = useLanguage();
   
   return (
@@ -718,7 +717,7 @@ function Footer() {
 }
 
 export default function App() {
-  const [lang, setLang] = useState<Language>('en');
+  const [lang, setLang] = useState('en');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleLang = () => {

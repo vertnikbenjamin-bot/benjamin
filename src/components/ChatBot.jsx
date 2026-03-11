@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'model'; text: string }[]>([
+  const [messages, setMessages] = useState([
     { role: 'model', text: "Hi! I'm Benjamin's AI assistant. How can I help you with visual content production today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
